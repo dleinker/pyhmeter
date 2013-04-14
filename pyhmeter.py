@@ -3,25 +3,17 @@ import csv
 
 class HMeter:
     """HMeter implements a Hedonometer as described in the Dodd paper"""
-    
+
+    # setup word scores, we only need to do this once.
     dataset = csv.reader(open("DataSetS1.csv", "r"), delimiter='\t')
     wordscores = {row[0]: row[2] for row in dataset}
 
     def __init__(self, wordlist):
         self.wordlist = wordlist
-
-    def wordcount(self):
-        """Returns Total number of words in list. Is this needed?"""
-        pass
-
-    def wordmatches(self):
-        """Returns total number of words that match the Dodd paper wordlist"""
-        count = 0
-        for word in self.wordlist:
-            print word
-            if word in self.wordscores:
-                count += 1
-        return count
+        # create a list of words that match the Dodd list of mechannical turk words
+        # we only care about words that match the list, this allows us to accept filthy
+        # sources of data 
+        self.matchlist = [word for word in self.wordlist if word in self.wordscores]
 
     def wordshift():
         """Some kind of crazy function that is going to return the wordshift"""
@@ -39,7 +31,7 @@ class HMeter:
         # create a dict based on the 'name' and 'happiness_average' columns
         count = 0
         happysum = 0
-        # for loops returns count of words that have a score and sum of their scores
+        # for loop returns count of words that have a score and sum of their scores
         for word in self.wordlist:
             # We're only interested if the word from our corpus is on 
             # our list of words with scores
