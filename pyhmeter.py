@@ -43,7 +43,8 @@ class HMeter:
                 if score >= 5.0 + deltah or score <= 5.0 - deltah: 
                     happysum  += score
                     count += 1
-
+        
+        # TODO figure out how we should handle this better. possibly return null? raise TypeError?
         if count != 0: # divide by zero errors are sad.
                 return happysum / count # dividing by the count gives us the mean.
         else:
