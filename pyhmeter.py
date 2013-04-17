@@ -15,14 +15,17 @@ class HMeter:
         # sources of data without too much filtering
         self.matchlist = [word for word in self.wordlist if word in self.wordscores]
 
-    def wordshift():
-        """Some kind of crazy function that is going to return the wordshift"""
-        pass
+    def fractional_abundance(self, word):
+        """Takes a word and return its fractional abundance within self.matchlist"""
+
+    def word_shift():
+        """Takes a list of words and compares it self.matchlist, returning whatever 
+        crazy math has to happen"""
+        """ We will need to check... relative frequencies of word between self.matchlist and arg.matchlist"""
 
     def happiness_score(self, deltah=0.0):
         """Takes a list of individual words and returns the happiness score.
-        deltah removes stop words as per Dodd paper, wordcount returns how many 
-        words matched the Dodd wordlist."""
+        deltah removes stop words as per Dodd paper."""
 
         count = 0
         happysum = 0
@@ -35,8 +38,7 @@ class HMeter:
                 happysum  += score
                 count += 1
         
-        # TODO figure out how we should handle this better. possibly return null? raise TypeError?
         if count != 0: # divide by zero errors are sad.
-                return happysum / count # dividing by the count gives us the mean.
+            return happysum / count # dividing by the count gives us the mean.
         else:
-            return 0.0
+            pass # empty lists have no score

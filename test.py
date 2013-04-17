@@ -7,7 +7,7 @@ class KnownValues(unittest.TestCase):
 
     test_words = ( ('laughter', 8.5), ('successful', 8.16), ('pleasure', 8.08), ('architect', 6.36), ('blackberry', 6.26), ('wasting', 3.22), ('ouch', 2.90), ('documents', 5.02), ('flip', 5.02), ('crowd', 4.14) )
 
-    hmeter_answers = ( (1, 6.21142857143), (2, 6.91), (3, 8.24666666667), (4, 0.0) )
+    hmeter_answers = ( (1, 6.21142857143), (2, 6.91), (3, 8.24666666667), )
 
     def test_single_word(self):
         """Passed a list with a single word, function should return that word's score"""
@@ -25,12 +25,20 @@ class KnownValues(unittest.TestCase):
 class BadInputs(unittest.TestCase):
 
     def test_empty_list(self):
-        """In case of an empty list, the score should be 0.0"""
+        """In case of an empty list, the score should be Null"""
         h = pyhmeter.HMeter([])
-        self.assertEqual(h.happiness_score(), 0.0)
+        self.assertIsNone(h.happiness_score())
 
     def test_null_list(self):
-        pass
+        """In case of null list, there should be a type error"""
+        with self.assertRaises(TypeError):
+            h = pyhmeter.HMeter(None)
+
+    def test_bad_deltah(self):
+        h = pyhmeter.HMeter(['butterflies', 'laughter', 'terrorist'])
+        for deltah in range(4,20):
+            self.assertIsNone(h.happiness_score(deltah))
+
 
 
 if __name__ == '__main__':
