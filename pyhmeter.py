@@ -4,20 +4,19 @@ import csv
 class HMeter:
     """HMeter implements a Hedonometer as described in the Dodd paper"""
 
-    # setup word scores, we only need to do this once.
-    dataset = csv.reader(open("DataSetS1.csv", "r"), delimiter='\t')
-    wordscores = {row[0]: row[2] for row in dataset}
+    # This is the dataset provided by the Dodd paper. Please see the README for a
+    # reference link and to download this file.
+    doddfile = csv.reader(open("Data_Set_S1.txt", "r"), delimiter='\t')
+    for x in range(4): # strip header info
+        doddfile.next()
+    wordscores = {row[0]: row[2] for row in doddfile}
 
     def __init__(self, wordlist):
         self.wordlist = wordlist
-        # TODO Possibly change deltah into an attribute rather than argument on 
-        # happiness_score. This would also require changing matchlist into 
-        # a function
         # self.matchlist = [word for word in self.wordlist if word in self.wordscores]
 
     def matchlist(self,deltah=0.0):
-        """Create a list of words that match the list for a specific value of deltah.
-        Removes stop words"""
+        """Strips anything from the wordlist that doesn't match the words from labMT 1.0"""
         matchlist = []
         for word in self.wordlist:
             if word in self.wordscores:
@@ -38,8 +37,9 @@ class HMeter:
 
     def word_shift():
         """Takes a list of words and compares it self.matchlist, returning whatever 
-        crazy math has to happen"""
+        crazy math has to happen, Will return a List of Tuples of Lists."""
         """ We will need to check... relative frequencies of word between self.matchlist and arg.matchlist"""
+        pass
 
     def happiness_score(self, deltah=0.0):
         """Takes a list of individual words and returns the happiness score.
