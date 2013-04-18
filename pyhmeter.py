@@ -10,10 +10,28 @@ class HMeter:
 
     def __init__(self, wordlist):
         self.wordlist = wordlist
-        # create a list of words that match the Dodd list of mechannical turk words
-        # we only care about words that match the list, this allows us to accept filthy
-        # sources of data without too much filtering
-        self.matchlist = [word for word in self.wordlist if word in self.wordscores]
+        # TODO Possibly change deltah into an attribute rather than argument on 
+        # happiness_score. This would also require changing matchlist into 
+        # a function
+        # self.matchlist = [word for word in self.wordlist if word in self.wordscores]
+
+    def matchlist(self,deltah=0.0):
+        """Create a list of words that match the list for a specific value of deltah.
+        Removes stop words"""
+        matchlist = []
+        for word in self.wordlist:
+            if word in self.wordscores:
+                score = float(self.wordscores[word])
+                if score >= 5.0 + deltah or score <= 5.0 - deltah:
+                    matchlist += [word]
+        return matchlist
+
+        """Alternate Method:
+        matchlist = [word for word in self.wordlist if word in self.wordscores]
+        for word in matchlist:
+            score = float(self.wordscore[word])
+            if score >= 5.0 + deltah or score <= 5.0 - deltah:
+                matchlist += [word]"""
 
     def fractional_abundance(self, word):
         """Takes a word and return its fractional abundance within self.matchlist"""
@@ -30,13 +48,9 @@ class HMeter:
         count = 0
         happysum = 0
 
-        # for loop returns count of words that have a score and sum of their scores
-        for word in self.matchlist:
-            score = float(self.wordscores[word]) 
-            # apply methodology to remove stop words as per Dodd et al. (2011)
-            if score >= 5.0 + deltah or score <= 5.0 - deltah: 
-                happysum  += score
-                count += 1
+        for word in self.matchlist(deltah):
+            happysum  += float(self.wordscores[word])
+            count += 1
         
         if count != 0: # divide by zero errors are sad.
             return happysum / count # dividing by the count gives us the mean.

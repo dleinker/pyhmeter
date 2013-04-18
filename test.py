@@ -33,6 +33,7 @@ class BadInputs(unittest.TestCase):
         """In case of null list, there should be a type error"""
         with self.assertRaises(TypeError):
             h = pyhmeter.HMeter(None)
+            score = h.happiness_score()
 
     def test_bad_deltah(self):
         h = pyhmeter.HMeter(['butterflies', 'laughter', 'terrorist'])
