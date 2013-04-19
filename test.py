@@ -1,11 +1,14 @@
 """Unit test for pyhmeter.py"""
 
 import pyhmeter
+import csv
 import unittest
 
 class KnownValues(unittest.TestCase):
 
-    test_words = ( ('laughter', 8.5), ('successful', 8.16), ('pleasure', 8.08), ('architect', 6.36), ('blackberry', 6.26), ('wasting', 3.22), ('ouch', 2.90), ('documents', 5.02), ('flip', 5.02), ('crowd', 4.14) )
+    test_words = ( ('laughter', 8.5), ('successful', 8.16), ('pleasure', 8.08), ('architect', 6.36), ('blackberry', 6.26), ('wasting', 3.22), ('ouch', 2.90), ('documents', 5.02), ('flip', 5.02), ('crowd', 4.14), ('ooogleyboogley', None), ('.', None), ('<HTML></HTML>', None) )
+
+    
 
     hmeter_answers = ( (1, 6.21142857143), (2, 6.91), (3, 8.24666666667), )
 
@@ -40,8 +43,11 @@ class BadInputs(unittest.TestCase):
         for deltah in range(4,20):
             self.assertIsNone(h.happiness_score(deltah))
 
+class FileIO(unittest.TestCase):
 
+    def test_doddfile_exists(self):
+        """Check for the existance of the labMT 1.0 file from Plos One"""
+        doddfile = csv.reader(open("Data_Set_S1.txt", "r"), delimiter="\t")
 
 if __name__ == '__main__':
     unittest.main()
-
