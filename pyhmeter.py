@@ -5,9 +5,10 @@ class HMeter:
     """HMeter implements a Hedonometer as described in the Dodd paper"""
 
     # This is the dataset provided by the Dodd paper. Please see the README for a
-    # reference link and to download this file.
+    # reference link and to download this file. From this dataset we create a dict
+    # that contains the words and their happiness score.
     doddfile = csv.reader(open("Data_Set_S1.txt", "r"), delimiter='\t')
-    for x in range(4): # strip header info
+    for _ in range(4): # strip header info
         doddfile.next()
     wordscores = {row[0]: row[2] for row in doddfile}
 
@@ -17,33 +18,30 @@ class HMeter:
 
     def matchlist(self,deltah=0.0):
         """Strips anything from the wordlist that doesn't match the words from labMT 1.0"""
-        matchlist = []
-        for word in self.wordlist:
-            if word in self.wordscores:
-                score = float(self.wordscores[word])
-                if score >= 5.0 + deltah or score <= 5.0 - deltah:
-                    matchlist += [word]
-        return matchlist
+        
+        # first we take every word that matches labMT 1.0
+        labmtmatches = [word for word in self.wordlist if word in self.wordscores]
 
-        """Alternate Method:
-        matchlist = [word for word in self.wordlist if word in self.wordscores]
-        for word in matchlist:
-            score = float(self.wordscore[word])
+        # then we strip out stop words as defined by Dodd paper
+        matchlist = []
+        for word in labmtmatches:
+            score = float(self.wordscores[word])
             if score >= 5.0 + deltah or score <= 5.0 - deltah:
-                matchlist += [word]"""
+                matchlist += [word]
+        return matchlist
 
     def fractional_abundance(self, word):
         """Takes a word and return its fractional abundance within self.matchlist"""
+        pass
 
-    def word_shift():
+    def word_shift(self, tcomp, deltah=0.0):
         """Takes a list of words and compares it self.matchlist, returning whatever 
         crazy math has to happen, Will return a List of Tuples of Lists."""
-        """ We will need to check... relative frequencies of word between self.matchlist and arg.matchlist"""
+        """ We will need to check... relative frequencies of word between self.matchlist and tcomp.matchlist"""
         pass
 
     def happiness_score(self, deltah=0.0):
-        """Takes a list of individual words and returns the happiness score.
-        deltah removes stop words as per Dodd paper."""
+        """Takes a list of individual words and returns the happiness score."""
 
         count = 0
         happysum = 0
