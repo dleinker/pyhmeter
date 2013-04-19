@@ -1,4 +1,4 @@
-**"All who joy would win must share it. Happiness was born a Twin." -Lord Byron**
+*"All who joy would win must share it. Happiness was born a Twin." -Lord Byron*
 ***
 
 A Python implementation of a hedonometer. Does not work yet. Do not use.
