@@ -1,4 +1,5 @@
 from __future__ import division
+from math import copysign
 import csv
 from fractions import Fraction
 
@@ -12,8 +13,9 @@ class HMeter:
 
     for x in xrange(4): # strip header info
        doddfile.next()
+
     wordscores = {row[0]: float(row[2]) for row in doddfile}
-    # wordscores = { 'A':1.0, 'B':5.0, 'C':9.0}
+    #wordscores = { 'A':1.0, 'B':5.0, 'C':9.0}
 
     def __init__(self, wordlist, deltah=0.0):
         self.wordlist = wordlist
@@ -36,8 +38,8 @@ class HMeter:
 
     def fractional_abundance(self, word):
         """Takes a word and return its fractional abundance within self.matchlist"""
-        """frac abundance = total occurances / total size """
-        frac_abund = Fraction(self.matchlist().count(word),len(self.matchlist()))
+        matchlist = self.matchlist()
+        frac_abund = matchlist.count(word) / len(matchlist)
         return frac_abund
 
     def word_shift(self, comp):
@@ -48,59 +50,57 @@ class HMeter:
         tcomp = HMeter(comp,self.deltah)
         # we want a list of all potential words, but only need each word once.
         word_shift_list = list(set(tcomp.matchlist() + self.matchlist()))
-        count = 0
-        print "COmparison text Happiness: %s" % tcomp.happiness_score()
-        print tcomp.matchlist()
-        print "Reference Text Happiness: %s" % self.happiness_score()
-        print self.matchlist()
+        print "WORD SHIFT LIST LENGTH: %s" % len(word_shift_list)
+        output_data = []
+        ref_happiness_score = self.happiness_score()
+        comp_happiness_score = tcomp.happiness_score()
+        happy_diff = comp_happiness_score - ref_happiness_score
 
         for word in word_shift_list:
-            print word
             abundance = tcomp.fractional_abundance(word) - self.fractional_abundance(word)
-            print "comparative abundance %s" % abundance
-            word_happy = HMeter([word])
-            print "word happiness: %s" % float(word_happy.happiness_score_frac())
-            happiness_shift = word_happy.happiness_score_frac() - self.happiness_score_frac() 
-            print "happiness_shift %s" % float(happiness_shift)
-            happiness_diff = tcomp.happiness_score_frac() - self.happiness_score_frac()
-            numerator = happiness_shift * abundance
-            print "NUMERATOR: %s" % float(numerator) 
-            count += numerator
-            print "count %s" % count 
+            happiness_shift = self.wordscores[word] - ref_happiness_score 
+            paper_score = (happiness_shift * abundance * 100) / happy_diff
+            output_data.append((word, paper_score, abundance, happiness_shift))
+            # count += happiness_shift * abundance
+            print output_data[-1]
         
-        count2 = 0
+        #count2 = 0
+        #count4 = 0 
+        #output_data = []
+        #for word, score, abundance, happiness_shift in word_data:
+        #    print word, score, abundance, happiness_shift
+        #    output_data.append((word, paper_score, copysign(1,abundance), copysign(1,happiness_shift))
 
-        for word in word_shift_list:
-            print word
-            word_happy = HMeter([word])
-            happiness_shift = word_happy.happiness_score_frac() - self.happiness_score_frac() 
-            print "shift %s" % float(happiness_shift)
-            abundance = tcomp.fractional_abundance(word) - self.fractional_abundance(word)
-            print "abundance %s" % abundance
-            numerator = happiness_shift * abundance
-            word_shift = Fraction(numerator,count)
-            count2 += word_shift
-            print "word_shift??? %s" % float(word_shift * 100) 
+        #for word, abundance, happiness_shift in word_data:
+        #    word_shift = (happiness_shift * abundance) / count
+        #    happy_diff= tcomp.happiness_score() - self.happiness_score()
+        #    count4 += happy_diff
+        #    paper_score = (happiness_shift * abundance * 100) / happy_diff
+        #    print count, happy_diff
+        #    output_data.append((word, word_shift * 100, copysign(1,abundance), copysign(1,happiness_shift), paper_score))
+        #    print output_data[-1]
+        #    count2 += word_shift
+        # sort words by absolute value of individual word shift
+        output_data.sort(key=lambda word: abs(word[1]))
+        print output_data[:30]
+        #count3 = 0
+        #for word, word_shift, abund, shift in output_data:
+        #    print word, word_shift
+        #    count3 += word_shift
 
-        print "THE COUNT %s" % float(count2)
+        return output_data
         
-    def happiness_score_frac(self):
-        """Takes a list of individual words and returns the happiness score."""
+    def happiness_score(self):
+        """Takes a list made up of individual words and returns the happiness score."""
 
         count = 0
         happysum = 0
 
         for word in self.matchlist():
-            happysum  += Fraction(self.wordscores[word])
+            happysum  += self.wordscores[word]
             count += 1
         
         if count != 0: # divide by zero errors are sad.
-            return Fraction(happysum, count) 
+            return happysum / count
         else:
             pass # empty lists have no score
-
-    def happiness_score(self):
-        """Returns a floating point happiness score."""
-        # TODO fix this awfulness
-        if self.happiness_score_frac():
-            return float(self.happiness_score_frac())
