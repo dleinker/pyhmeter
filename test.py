@@ -23,13 +23,23 @@ class KnownValues(unittest.TestCase):
             h = pyhmeter.HMeter([pair[0] for pair in self.test_words],deltah)
             self.assertAlmostEqual(h.happiness_score(),result)
 
-    #def test_word_shift_sum(self):
-        """A Sum of Wordshifts should add up to 100 or -100"""
-    """    sum = 0
+    def test_matchlist(self):
+        """Test that matchlist works properly. Tests matchlist on init"""
         h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
-        for word in h.matchlist():
-            sum += h.word_shift
-"""
+        match_list_test = [word for word, score in self.test_words if score]
+        self.assertListEqual(h.matchlist,match_list_test) 
+
+    def test_set_deltah(self):
+        """Checks self.matchlist when deltah is changed"""
+        pass
+
+    #def test_word_shift_sum(self):
+    #    """A Sum of Wordshifts should add up to 100 or -100"""
+    #"""    sum = 0
+    #    h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
+    #    for word in h.matchlist():
+    #        sum += h.word_shift"""
+
 class BadInputs(unittest.TestCase):
 
     def test_empty_list(self):
