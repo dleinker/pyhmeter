@@ -4,14 +4,20 @@ import pyhmeter
 import csv
 import unittest
 
+
 class KnownValues(unittest.TestCase):
 
-    test_words = ( ('laughter', 8.5), ('successful', 8.16), ('pleasure', 8.08), ('architect', 6.36), ('blackberry', 6.26), ('wasting', 3.22), ('ouch', 2.90), ('documents', 5.02), ('flip', 5.02), ('crowd', 4.14), ('ooogleyboogley', None), ('.', None), ('<HTML></HTML>', None) )
+    test_words = (('laughter', 8.5), ('successful', 8.16), ('pleasure', 8.08),
+                  ('architect', 6.36), ('blackberry', 6.26), ('wasting', 3.22),
+                  ('ouch', 2.90), ('documents', 5.02), ('flip', 5.02),
+                  ('crowd', 4.14), ('ooogleyboogley', None), ('.', None),
+                  ('<HTML></HTML>', None))
 
-    hmeter_answers = ( (1, 6.21142857143), (2, 6.91), (3, 8.24666666667), )
+    hmeter_answers = ((1, 6.21142857143), (2, 6.91), (3, 8.24666666667))
 
     def test_single_word(self):
-        """Passed a list with a single word, function should return that word's score"""
+        """Passed a list with a single word, function should return that
+        word's score"""
         for word, score in self.test_words:
             h = pyhmeter.HMeter([word])
             result = h.happiness_score()
@@ -20,18 +26,34 @@ class KnownValues(unittest.TestCase):
     def test_deltah(self):
         """Test that hmeter works properly at all levels of deltah"""
         for deltah, result in self.hmeter_answers:
-            h = pyhmeter.HMeter([pair[0] for pair in self.test_words],deltah)
-            self.assertAlmostEqual(h.happiness_score(),result)
+            h = pyhmeter.HMeter([pair[0] for pair in self.test_words], deltah)
+            self.assertAlmostEqual(h.happiness_score(), result)
 
     def test_matchlist(self):
         """Test that matchlist works properly. Tests matchlist on init"""
         h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
         match_list_test = [word for word, score in self.test_words if score]
-        self.assertListEqual(h.matchlist,match_list_test) 
+        self.assertListEqual(h.matchlist, match_list_test)
 
     def test_set_deltah(self):
-        """Checks self.matchlist when deltah is changed"""
-        pass
+        """Checks that set_delta changes deltah"""
+        h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
+        for deltah in xrange(6):
+            h.set_deltah(deltah)
+            self.assertEqual(h.deltah, deltah)
+
+    def test_new_matchlist_generation(self):
+        """Checks matchlist after deltah is changed"""
+        h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
+        for deltah in xrange(4):
+            h.set_deltah(deltah)
+            match_list_test = []
+            for word, score in self.test_words:
+                if score and (score >= 5.0 + deltah or score <= 5.0 - deltah):
+                    match_list_test.append(word)
+            self.assertListEqual(h.matchlist, match_list_test)
+
+
 
     #def test_word_shift_sum(self):
     #    """A Sum of Wordshifts should add up to 100 or -100"""
@@ -39,6 +61,7 @@ class KnownValues(unittest.TestCase):
     #    h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
     #    for word in h.matchlist():
     #        sum += h.word_shift"""
+
 
 class BadInputs(unittest.TestCase):
 
@@ -54,9 +77,11 @@ class BadInputs(unittest.TestCase):
             score = h.happiness_score()
 
     def test_bad_deltah(self):
-        for deltah in range(4,20):
-            h = pyhmeter.HMeter(['butterflies', 'laughter', 'terrorist'],deltah)
+        for deltah in range(4, 20):
+            h = pyhmeter.HMeter(['butterflies', 'laughter',
+                                'terrorist'], deltah)
             self.assertIsNone(h.happiness_score())
+
 
 class FileIO(unittest.TestCase):
 
