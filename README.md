@@ -1,5 +1,5 @@
 #pyhmeter
-##A hedonometer implmentation using python
+##A hedonometer implementation using python
 
 *"All who joy would win must share it. Happiness was born a Twin." -Lord Byron*
 ***
