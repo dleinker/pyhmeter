@@ -54,7 +54,7 @@ class KnownValues(unittest.TestCase):
             self.assertListEqual(h.matchlist, match_list_test)
 
 
-
+    # TODO Write tests for word shift
     #def test_word_shift_sum(self):
     #    """A Sum of Wordshifts should add up to 100 or -100"""
     #"""    sum = 0
