@@ -2,7 +2,7 @@ from __future__ import division
 import csv
 
 
-class HMeter:
+class HMeter(object):
     """HMeter implements a Hedonometer as described in the Dodd paper"""
 
     # This is the dataset provided by the Dodd paper. Please see the README for
@@ -24,7 +24,7 @@ class HMeter:
         """Changes deltah, which generates a new matchlist, Stripping anything
         from the wordlist that doesn't match the words from labMT 1.0"""
         self.deltah = deltah
-
+        # TODO Should probably raise a range error if deltah is nonsensical
         # first we take every word that matches labMT 1.0
         labmtmatches = [word for word in self.wordlist
                         if word in self.wordscores]
@@ -65,7 +65,6 @@ class HMeter:
             happiness_shift = self.wordscores[word] - ref_happiness_score
             paper_score = (happiness_shift * abundance * 100) / happy_diff
             output_data.append((word, paper_score, abundance, happiness_shift))
-            print output_data[-1]
 
         # sort words by absolute value of individual word shift
         output_data.sort(key=lambda word: abs(word[1]))
@@ -75,12 +74,11 @@ class HMeter:
         """Takes a list made up of individual words and returns the happiness
         score."""
 
-        count = 0
         happysum = 0
+        count = len(self.matchlist)
 
         for word in self.matchlist:
             happysum += self.wordscores[word]
-            count += 1
 
         if count != 0:  # divide by zero errors are sad.
             return happysum / count
