@@ -53,6 +53,12 @@ class KnownValues(unittest.TestCase):
                     match_list_test.append(word)
             self.assertListEqual(h.matchlist, match_list_test)
 
+    def test_fractinal_abundance(self):
+        """Tests fractional abundance"""
+        h = pyhmeter.HMeter([pair[0] for pair in self.test_words])
+        frac_abund = h.fractional_abundance('documents')
+        self.assertEqual(frac_abund,0.1)
+
 
     # TODO Write tests for word shift
     #def test_word_shift_sum(self):
