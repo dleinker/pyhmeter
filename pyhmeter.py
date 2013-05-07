@@ -1,23 +1,23 @@
 from __future__ import division
 import csv
 
+def load_scores(filename):
+    """Takes a file from the Dodd research paper and returns a dict of
+    wordscores. Note this function is tailored to the file provided
+    by the Dodd paper."""
+    
+    doddfile = csv.reader(open(filename, "r"), delimiter='\t')
+    for x in xrange(4):  # strip header info
+        doddfile.next()
+
+    return {row[0]: float(row[2]) for row in doddfile}
 
 class HMeter(object):
     """HMeter implements a Hedonometer as described in the Dodd paper"""
 
-    # This is the dataset provided by the Dodd paper. Please see the README for
-    # a reference link and to download this file. From this dataset we create
-    # a dict that contains the words and their happiness score.
-    doddfile = csv.reader(open("Data_Set_S1.txt", "r"), delimiter='\t')
-
-    for x in xrange(4):  # strip header info
-        doddfile.next()
-
-    wordscores = {row[0]: float(row[2]) for row in doddfile}
-    #wordscores = { 'A':1.0, 'B':5.0, 'C':9.0}
-
-    def __init__(self, wordlist, deltah=0.0):
+    def __init__(self, wordlist, wordscores, deltah=0.0):
         self.wordlist = wordlist
+        self.wordscores = wordscores
         self.set_deltah(deltah)
 
     def set_deltah(self, deltah):
@@ -52,7 +52,7 @@ class HMeter(object):
         tcomp = HMeter(comp, self.deltah)
 
         # we want a list of all potential words, but only need each word once.
-        word_shift_list = list(set(tcomp.matchlist + self.matchlist))
+        word_shift_list = set(tcomp.matchlist + self.matchlist)
 
         output_data = []
         ref_happiness_score = self.happiness_score()
