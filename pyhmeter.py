@@ -13,7 +13,11 @@ def load_scores(filename):
     return {row[0]: float(row[2]) for row in doddfile}
 
 class HMeter(object):
-    """HMeter implements a Hedonometer as described in the Dodd paper"""
+    """HMeter implements a Hedonometer as described in the Dodd paper. It
+    expects a list of individual words, such as those provided by 
+    nltk.word_tokenize, as wordlist. It expects a dict of words as k and
+    floating point wordscores as v for wordscores. deltah allows us to 
+    filter out the most neutral words as stop words."""
 
     def __init__(self, wordlist, wordscores, deltah=0.0):
         self.wordlist = wordlist
