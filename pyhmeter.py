@@ -4,7 +4,8 @@ import csv
 def load_scores(filename):
     """Takes a file from the Dodd research paper and returns a dict of
     wordscores. Note this function is tailored to the file provided
-    by the Dodd paper."""
+    by the Dodd paper. For other sets of word scores, a dict can be
+    passed directly to HMeter."""
     
     doddfile = csv.reader(open(filename, "r"), delimiter='\t')
     for x in xrange(4):  # strip header info
@@ -22,12 +23,16 @@ class HMeter(object):
     def __init__(self, wordlist, wordscores, deltah=0.0):
         self.wordlist = wordlist
         self.wordscores = wordscores
-        self.set_deltah(deltah)
-
-    def set_deltah(self, deltah):
-        """Changes deltah, which generates a new matchlist, Stripping anything
-        from the wordlist that doesn't match the words from labMT 1.0"""
         self.deltah = deltah
+
+    _deltah = None
+    @property
+    def deltah(self):
+        return self._deltah
+
+    @deltah.setter
+    def deltah(self, deltah):
+        self._deltah = deltah
         # TODO Should probably raise a range error if deltah is nonsensical
         # first we take every word that matches labMT 1.0
         labmtmatches = [word for word in self.wordlist

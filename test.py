@@ -42,14 +42,14 @@ class KnownValues(unittest.TestCase):
         """Checks that set_delta changes deltah"""
         h = pyhmeter.HMeter([pair[0] for pair in self.test_words], self.doddscores)
         for deltah in xrange(6):
-            h.set_deltah(deltah)
+            h.deltah = deltah
             self.assertEqual(h.deltah, deltah)
 
     def test_new_matchlist_generation(self):
         """Checks matchlist after deltah is changed"""
         h = pyhmeter.HMeter([pair[0] for pair in self.test_words], self.doddscores)
         for deltah in xrange(4):
-            h.set_deltah(deltah)
+            h.deltah = deltah
             match_list_test = []
             for word, score in self.test_words:
                 if score and (score >= 5.0 + deltah or score <= 5.0 - deltah):
