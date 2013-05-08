@@ -35,8 +35,8 @@ class HMeter(object):
         self._deltah = deltah
         # TODO Should probably raise a range error if deltah is nonsensical
         # first we take every word that matches labMT 1.0
-        labmtmatches = [word for word in self.wordlist
-                        if word in self.wordscores]
+        labmtmatches = (word for word in self.wordlist
+                        if word in self.wordscores)
 
         # then we strip out stop words as described by Dodd paper
         self.matchlist = []
