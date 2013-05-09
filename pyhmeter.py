@@ -53,8 +53,19 @@ class HMeter(object):
         return frac_abund
 
     def word_shift(self, comp):
-        """Returns a list of tuples that contain each word's contribution to
-        happiness score shift between two samples."""
+        """Produces data necessary to create a word shift graph. Returns a list 
+        of tuples that contain each word's contribution to happiness score shift 
+        between two samples. So for example, assigned to a variable 'output_data'
+        output_data[n] represents the data for one word where:
+            
+        output_data[n][0] the word
+        output_data[n][1] the proportional contribution the word gives to overall
+                          word shift
+        output_data[n][2] The relative abundance of word between the two samples
+        output_data[n][3] The word's happiness relative to the refernce sample
+        
+        Using this data, we can construct word shift graphs as described here:
+        http://www.hedonometer.org/shifts.html"""
 
         # initialize variables for potentially large loop.
         # create our comparison object. self is the reference object.
