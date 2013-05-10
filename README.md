@@ -4,7 +4,7 @@
 *"All who joy would win must share it. Happiness was born a Twin." -Lord Byron*
 ***
 
-A hedonometer is a [device](http://en.wikipedia.org/wiki/Hedonometer) that measures happiness. This python based hedonometer assigns a numerical score to a body of text based on the methodology described in [this paper](http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026752). As with any progammatic process that attempts to distill the complexities of human expression into 1s and 0s this comes with major caveats. I implore you to read Dodd et al.'s work before using this for anything serious.
+A hedonometer is a [device](http://en.wikipedia.org/wiki/Hedonometer) that measures happiness, in this context, a sentiment analysis tool. This python based hedonometer assigns a numerical score to a body of text based on the methodology described in [this paper](http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026752). As with any progammatic process that attempts to distill the complexities of human expression into 1s and 0s this comes with major caveats. I implore you to read Dodd et al.'s work before using this for anything serious.
 
 Some important concepts: HMeter expects a list of individual words, for example the result of [nltk.word_tokenize](http://nltk.org/api/nltk.tokenize.html). The matchlist attribute contains all words in the sample that have a score according the word scores provided by the Dodd paper. The hedonometer allows for 'tuning' by removing the most neutral words from the matchlist. This is done using the set_deltah method and will generate a new matchlist based on the new deltah.
 
