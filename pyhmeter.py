@@ -14,7 +14,7 @@ def load_scores(filename):
     return {row[0]: float(row[2]) for row in doddfile}
 
 class HMeter(object):
-    """HMeter implements a Hedonometer as described in the Dodd paper. It
+    """HMeter is the main class to prepare a text sample for scores. It
     expects a list of individual words, such as those provided by 
     nltk.word_tokenize, as wordlist. It expects a dict of words as k and
     floating point wordscores as v for wordscores. deltah allows us to 
@@ -28,10 +28,13 @@ class HMeter(object):
     _deltah = None
     @property
     def deltah(self):
+        """Deltah determines stop words. The higher deltah the more neutral 
+        words are are discarded from the matchlist."""
         return self._deltah
 
     @deltah.setter
     def deltah(self, deltah):
+        """Each time deltah is set we need to regenerate the matchlist."""
         self._deltah = deltah
         # TODO Should probably raise a range error if deltah is nonsensical
         # first we take every word that matches labMT 1.0
@@ -40,7 +43,6 @@ class HMeter(object):
 
         # then we strip out stop words as described by Dodd paper
         self.matchlist = []
-
         for word in labmtmatches:
             score = self.wordscores[word]
             if score >= 5.0 + self.deltah or score <= 5.0 - self.deltah:
